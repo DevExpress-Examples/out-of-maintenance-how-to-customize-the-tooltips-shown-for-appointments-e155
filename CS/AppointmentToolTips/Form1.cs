@@ -15,10 +15,11 @@ namespace CustomAppointmentEditForm {
         public Form1() {
             InitializeComponent();
             schedulerControl1.ToolTipController = toolTipController1;
+            FillData();
 
-            this.schedulerStorage1.AppointmentsChanged += schedulerStorage_AppointmentsChanged;
-            this.schedulerStorage1.AppointmentsInserted += schedulerStorage_AppointmentsChanged;
-            this.schedulerStorage1.AppointmentsDeleted += schedulerStorage_AppointmentsChanged;
+            this.schedulerDataStorage1.AppointmentsChanged += schedulerDataStorage_AppointmentsChanged;
+            this.schedulerDataStorage1.AppointmentsInserted += schedulerDataStorage_AppointmentsChanged;
+            this.schedulerDataStorage1.AppointmentsDeleted += schedulerDataStorage_AppointmentsChanged;
 
             this.schedulerControl1.AppointmentViewInfoCustomizing += SchedulerControl1_AppointmentViewInfoCustomizing;
 
@@ -27,9 +28,7 @@ namespace CustomAppointmentEditForm {
 
             schedulerControl1.Start = new DateTime(2010, 7, 11);
             schedulerControl1.OptionsView.ToolTipVisibility = ToolTipVisibility.Always;
-            toolTipController1.ToolTipType = ToolTipType.Standard;
-            
-            FillData();
+            toolTipController1.ToolTipType = ToolTipType.Standard;            
 
             schedulerControl1.OptionsCustomization.AllowDisplayAppointmentFlyout = false;
         }
@@ -72,10 +71,10 @@ namespace CustomAppointmentEditForm {
         void FillData() {
             AppointmentCustomFieldMapping customNameMapping = new AppointmentCustomFieldMapping("CustomName", "CustomName");
             AppointmentCustomFieldMapping customStatusMapping = new AppointmentCustomFieldMapping("CustomStatus", "CustomStatus");
-            schedulerStorage1.Appointments.CustomFieldMappings.Add(customNameMapping);
-            schedulerStorage1.Appointments.CustomFieldMappings.Add(customStatusMapping);
-            FillResourcesStorage(schedulerStorage1.Resources.Items, resDataFileName);
-            FillAppointmentsStorage(schedulerStorage1.Appointments.Items, aptDataFileName);
+            schedulerDataStorage1.Appointments.CustomFieldMappings.Add(customNameMapping);
+            schedulerDataStorage1.Appointments.CustomFieldMappings.Add(customStatusMapping);
+            FillResourcesStorage(schedulerDataStorage1.Resources.Items, resDataFileName);
+            FillAppointmentsStorage(schedulerDataStorage1.Appointments.Items, aptDataFileName);
         }
 
         static Stream GetFileStream(string fileName) {
@@ -97,8 +96,8 @@ namespace CustomAppointmentEditForm {
         }
         #endregion
 
-        private void schedulerStorage_AppointmentsChanged(object sender, PersistentObjectsEventArgs e) {
-            schedulerStorage1.Appointments.Items.WriteXml(aptDataFileName);
+        private void schedulerDataStorage_AppointmentsChanged(object sender, PersistentObjectsEventArgs e) {
+            schedulerDataStorage1.Appointments.Items.WriteXml(aptDataFileName);
         }
 
         private void toggleSwitch1_Toggled(object sender, EventArgs e) {
