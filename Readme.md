@@ -1,3 +1,9 @@
+<!-- default file list -->
+*Files to look at*:
+
+* [Form1.cs](./CS/AppointmentToolTips/Form1.cs) (VB: [Form1.vb](./VB/AppointmentToolTips/Form1.vb))
+* [Program.cs](./CS/AppointmentToolTips/Program.cs) (VB: [Program.vb](./VB/AppointmentToolTips/Program.vb))
+<!-- default file list end -->
 # How to customize the tooltips shown for appointments
 
 
