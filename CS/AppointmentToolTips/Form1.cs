@@ -31,6 +31,7 @@ namespace CustomAppointmentEditForm {
             toolTipController1.ToolTipType = ToolTipType.Standard;            
 
             schedulerControl1.OptionsCustomization.AllowDisplayAppointmentFlyout = false;
+            schedulerControl1.Start = new DateTime(2010, 7, 12);
         }
 
         #region #tooltip_EmptySubject
@@ -41,6 +42,8 @@ namespace CustomAppointmentEditForm {
         #endregion #tooltip_EmptySubject
 
         #region #ToolTipControllerBeforeShow
+        readonly Font titleFont = new Font("Times New Roman", 14), 
+                      footerFont = new Font("Comic Sans MS", 8);
         private void toolTipController1_BeforeShow(object sender, ToolTipControllerShowEventArgs e) {
             ToolTipController controller = sender as ToolTipController;
             AppointmentViewInfo aptViewInfo = controller.ActiveObject as AppointmentViewInfo;
@@ -55,11 +58,11 @@ namespace CustomAppointmentEditForm {
                 SuperToolTip SuperTip = new SuperToolTip();
                 SuperToolTipSetupArgs args = new SuperToolTipSetupArgs();
                 args.Title.Text = "Info";
-                args.Title.Font = new Font("Times New Roman", 14);
+                args.Title.Font = titleFont;
                 args.Contents.Text = aptViewInfo.Description;
                 args.Contents.Image = resImage;
                 args.ShowFooterSeparator = true;
-                args.Footer.Font = new Font("Comic Sans MS", 8);
+                args.Footer.Font = footerFont;
                 args.Footer.Text = "SuperTip";
                 SuperTip.Setup(args);
                 e.SuperTip = SuperTip;
@@ -78,21 +81,17 @@ namespace CustomAppointmentEditForm {
         }
 
         static Stream GetFileStream(string fileName) {
-            return new StreamReader(fileName).BaseStream;
+            return new FileStream(fileName, FileMode.Open);
         }
 
         static void FillAppointmentsStorage(AppointmentCollection c, string fileName) {
-            using (Stream stream = GetFileStream(fileName)) {
-                c.ReadXml(stream);
-                stream.Close();
-            }
+            using (var _stream = GetFileStream(fileName)) 
+                c.ReadXml(_stream);
         }
 
         static void FillResourcesStorage(ResourceCollection c, string fileName) {
-            using (Stream stream = GetFileStream(fileName)) {
-                c.ReadXml(stream);
-                stream.Close();
-            }
+            using (var _stream = GetFileStream(fileName)) 
+                c.ReadXml(_stream);
         }
         #endregion
 
@@ -101,14 +100,14 @@ namespace CustomAppointmentEditForm {
         }
 
         private void toggleSwitch1_Toggled(object sender, EventArgs e) {
-            if (this.toggleSwitch1.IsOn) {
-                this.schedulerControl1.AppointmentViewInfoCustomizing -= SchedulerControl1_AppointmentViewInfoCustomizing;
+            if (toggleSwitch1.IsOn) {
+                schedulerControl1.AppointmentViewInfoCustomizing -= SchedulerControl1_AppointmentViewInfoCustomizing;
                 toolTipController1.BeforeShow += toolTipController1_BeforeShow;
                 checkEdit1.Visible = true;
             }
             else {
-                this.schedulerControl1.AppointmentViewInfoCustomizing += SchedulerControl1_AppointmentViewInfoCustomizing;
-                this.toolTipController1.BeforeShow -= toolTipController1_BeforeShow;
+                schedulerControl1.AppointmentViewInfoCustomizing += SchedulerControl1_AppointmentViewInfoCustomizing;
+                toolTipController1.BeforeShow -= toolTipController1_BeforeShow;
                 checkEdit1.Visible = false;
             }
         }
